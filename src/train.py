@@ -60,11 +60,17 @@ def get_models() -> Dict[str, object]:
         ),
         "Random Forest": RandomForestRegressor(
             random_state=RANDOM_STATE,
-            n_estimators=200,
+            n_estimators=500,
+            max_depth=25,
+            min_samples_split=5,
+            min_samples_leaf=2,
             n_jobs=-1,
         ),
         "Gradient Boosting": GradientBoostingRegressor(
-            random_state=RANDOM_STATE
+            random_state=RANDOM_STATE,
+            n_estimators=300,
+            learning_rate=0.05,
+            max_depth=4,
         ),
     }
 

@@ -294,6 +294,35 @@ def create_price_per_sqft(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
+#kuch toh hai 
+
+
+def remove_price_per_sqft_outliers(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Remove price_per_sqft outliers using location-wise mean ± std.
+    """
+
+    cleaned_df = pd.DataFrame()
+
+    for location, location_df in df.groupby("location"):
+
+        mean = location_df["price_per_sqft"].mean()
+        std = location_df["price_per_sqft"].std()
+
+        filtered = location_df[
+            (location_df["price_per_sqft"] >= (mean - std))
+            &
+            (location_df["price_per_sqft"] <= (mean + std))
+        ]
+
+        cleaned_df = pd.concat(
+            [cleaned_df, filtered],
+            ignore_index=True,
+        )
+
+    return cleaned_df
+
+
 
 # --------------------------------------------------------
 # Outlier Removal
@@ -311,10 +340,12 @@ def remove_outliers(df: pd.DataFrame) -> pd.DataFrame:
         (df["total_sqft"] / df["bhk"]) >= 300
     ]
 
+    df = remove_price_per_sqft_outliers(df)
+
     removed = before - len(df)
 
     logger.info(
-        "Removed %s BHK outliers.",
+        "Removed %s outlier rows.",
         removed,
     )
 
