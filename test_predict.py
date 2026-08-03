@@ -1,7 +1,7 @@
 from src.data_loader import load_data
 from src.preprocessing import preprocess_data
 from src.feature_engineering import prepare_features
-from src.train import train_best_model
+from src.predict import load_model, predict
 
 df = load_data()
 
@@ -9,6 +9,9 @@ df = preprocess_data(df)
 
 X, y = prepare_features(df)
 
-model = train_best_model(X, y)
+model = load_model()
 
-print("Training completed successfully.")
+predictions = predict(model, X.head())
+
+print("Predictions:")
+print(predictions)
