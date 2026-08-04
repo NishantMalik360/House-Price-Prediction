@@ -44,28 +44,29 @@ def prepare_input(input_data: dict) -> pd.DataFrame:
 
     columns = load_feature_columns()
 
+    # Initialize with float values so decimal inputs are allowed
     df = pd.DataFrame(
-        [[0] * len(columns)],
+        [[0.0] * len(columns)],
         columns=columns,
     )
 
     # Numerical Features
-    df.at[0, "total_sqft"] = input_data["total_sqft"]
-    df.at[0, "bath"] = input_data["bath"]
-    df.at[0, "balcony"] = input_data["balcony"]
-    df.at[0, "bhk"] = input_data["bhk"]
+    df.at[0, "total_sqft"] = float(input_data["total_sqft"])
+    df.at[0, "bath"] = float(input_data["bath"])
+    df.at[0, "balcony"] = float(input_data["balcony"])
+    df.at[0, "bhk"] = float(input_data["bhk"])
 
     # Area Type
     area_column = f"area_type_{input_data['area_type']}"
 
     if area_column in df.columns:
-        df.at[0, area_column] = 1
+        df.at[0, area_column] = 1.0
 
     # Location
     location_column = f"location_{input_data['location']}"
 
     if location_column in df.columns:
-        df.at[0, location_column] = 1
+        df.at[0, location_column] = 1.0
 
     return df
 
